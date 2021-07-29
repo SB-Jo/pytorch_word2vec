@@ -23,6 +23,8 @@ def create_contexts_target(file_path, window_size, vocab, sample_size):
     with open(file_path, encoding='utf-8') as f:
         for line in f:
             _, text = line.split('\t')
+            text= re.sub('<br />', "", text)
+            text = re.sub('[^a-zA-Z]', " ", text)
             text = vocab(tokenizer(text))
             for t in text:
                 p[t] += 1
@@ -34,7 +36,7 @@ def create_contexts_target(file_path, window_size, vocab, sample_size):
 
     p = np.power(p, 0.75)
     p /= np.sum(p)
-    
+
     print('문맥-타겟 단어 생성 및 네거티브 샘플링 데이터 생성 시작')
     for c in corpus:
         for idx in range(window_size, len(c)-window_size):
