@@ -3,8 +3,10 @@ import torch.nn as nn
 
 class Skipgram(nn.Module):
     def __init__(self, vocab_size, hidden_size):
+        super().__init__()
         self.in_embedding = nn.Embedding(vocab_size, hidden_size)
         self.out_embedding = nn.Embedding(vocab_size, hidden_size)
+        
 
     def forward(self, x):
         # |x| = (batch_size, 1+window_size*2)
@@ -22,7 +24,7 @@ class Skipgram(nn.Module):
         x = torch.bmm(target, context.transpose(1,2))
         # |x| = (bs, 1, window_size*2)
 
-        x = torch.mean(x, dim=-1)
+        x = torch.mean(x, dim=-1).squeeze()
 
         return x
 

@@ -48,18 +48,18 @@ def create_contexts_target(file_path, window_size, vocab, sample_size):
                     continue
                 # c[idx] : target
                 # c[idx+t] : context
-                cs.append([c[idx+t]])
+                cs.append(c[idx+t])
             targets.append(c[idx])
             contexts.append(cs)
             labels.append(1)
             negative_sample = n_sampler.get_negative_sample(c[idx])
-            
-            targets.append(c[idx])
-            contexts.append(list(negative_sample))
-            labels.append(0)
-
+            targets += [c[idx]]*sample_size
+            contexts += negative_sample.tolist()
+            labels += [0]*sample_size
+    print(targets[:10])
+    print(contexts[:10])
     cs = torch.cat([torch.LongTensor(targets).unsqueeze(1), torch.LongTensor(contexts)], dim=-1)
-    labels = torch.LongTensor(labels)
+    labels = torch.FloatTensor(labels)
     print('문맥-타겟 단어 생성 및 네거티브 샘플링 데이터 생성 끝')
     return cs, labels
 

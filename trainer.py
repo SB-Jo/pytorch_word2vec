@@ -49,10 +49,6 @@ class Trainer():
         for epoch in range(config.n_epochs):
             train_loss = self._train(x, y, config)
 
-            print("Epoch(%d/%d): train_loss=%.4e  valid_loss=%.4e  lowest_loss=%.4e" % (
-                epoch + 1,
-                config.n_epochs,
-                train_loss
-            ))
+            print(f"Epoch({epoch+1}/{config.n_epochs}): train_loss={train_loss:.3f}")
         print('Word2Vec 학습 끝')
         return self.model
